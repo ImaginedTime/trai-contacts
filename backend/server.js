@@ -45,7 +45,7 @@ app.get('/api/contacts', (req, res) => {
   
   // Apply search filter
   if (search) {
-    query += ' AND (firstName LIKE ? OR lastName LIKE ? OR email LIKE ? OR company LIKE ?)';
+    query += ' AND (firstName LIKE ? OR lastName LIKE ? OR email LIKE ? OR company LIKE ? OR tags LIKE ?)';
     const searchTerm = `%${search}%`;
     params.push(searchTerm, searchTerm, searchTerm, searchTerm);
   }
