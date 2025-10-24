@@ -9,13 +9,40 @@ interface ThemeState {
 
 export const useThemeStore = create<ThemeState>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       isDark: false,
-      toggleTheme: () => set((state) => ({ isDark: !state.isDark })),
-      setTheme: (isDark: boolean) => set({ isDark }),
+      toggleTheme: () => {
+        const newIsDark = !get().isDark;
+        set({ isDark: newIsDark });
+        // Apply theme immediately
+        if (newIsDark) {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+      },
+      setTheme: (isDark: boolean) => {
+        set({ isDark });
+        // Apply theme immediately
+        if (isDark) {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+      },
     }),
     {
       name: 'theme-storage',
+      onRehydrateStorage: () => (state) => {
+        if (state) {
+          // Apply theme on rehydration
+          if (state.isDark) {
+            document.documentElement.classList.add('dark');
+          } else {
+            document.documentElement.classList.remove('dark');
+          }
+        }
+      },
     }
   )
 );

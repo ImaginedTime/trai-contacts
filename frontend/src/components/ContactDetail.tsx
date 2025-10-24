@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import type { Contact } from '../types/contact';
 import { getInitials, formatPhoneNumber, formatDate } from '../utils/format';
 
@@ -17,10 +17,24 @@ export const ContactDetail: React.FC<ContactDetailProps> = ({
   onDelete,
   onToggleFavorite,
 }) => {
+  const [optimisticFavorite, setOptimisticFavorite] = useState<boolean | null>(null);
+
   if (!contact) return null;
 
+  // Use optimistic state if available, otherwise use contact data
+  const currentFavorite = optimisticFavorite !== null ? optimisticFavorite : contact.favorite;
+
+  // Reset optimistic state when contact data changes (after successful mutation)
+  useEffect(() => {
+    setOptimisticFavorite(null);
+  }, [contact.favorite]);
+
   const handleToggleFavorite = () => {
-    onToggleFavorite(contact.id, !contact.favorite);
+    const newFavorite = !currentFavorite;
+    // Optimistically update the UI
+    setOptimisticFavorite(newFavorite);
+    // Call the actual toggle function
+    onToggleFavorite(contact.id, newFavorite);
   };
 
   const handleEdit = () => {
@@ -36,7 +50,7 @@ export const ContactDetail: React.FC<ContactDetailProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto">
-      <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+      <div className="flex items-end justify-center min-h-screen pt-4 px-2 sm:px-4 pb-20 text-center sm:block sm:p-0">
         {/* Background overlay */}
         <div
           className="fixed inset-0 bg-gray-700 bg-opacity-75 opacity-80 transition-opacity"
@@ -46,7 +60,7 @@ export const ContactDetail: React.FC<ContactDetailProps> = ({
 
         {/* Modal panel */}
         <div
-          className="relative inline-block align-bottom bg-white dark:bg-gray-800 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
+          className="relative inline-block align-bottom bg-white dark:bg-gray-800 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle w-full max-w-lg mx-auto"
           role="dialog"
           aria-modal="true"
           aria-labelledby="modal-title"
@@ -81,13 +95,13 @@ export const ContactDetail: React.FC<ContactDetailProps> = ({
                 <button
                   onClick={handleToggleFavorite}
                   className={`p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors ${
-                    contact.favorite ? 'text-yellow-500' : 'text-gray-400 hover:text-yellow-500'
+                    currentFavorite ? 'text-yellow-500' : 'text-gray-400 hover:text-yellow-500'
                   }`}
-                  aria-label={contact.favorite ? 'Remove from favorites' : 'Add to favorites'}
+                  aria-label={currentFavorite ? 'Remove from favorites' : 'Add to favorites'}
                 >
                   <svg
                     className="h-6 w-6"
-                    fill={contact.favorite ? 'currentColor' : 'none'}
+                    fill={currentFavorite ? 'currentColor' : 'none'}
                     stroke="currentColor"
                     viewBox="0 0 24 24"
                   >

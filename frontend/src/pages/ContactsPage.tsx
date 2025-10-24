@@ -43,8 +43,12 @@ export const ContactsPage: React.FC = () => {
     toggleFavoriteMutation.mutate(
       { id, favorite },
       {
-        onSuccess: () => {
+        onSuccess: (updatedContact) => {
           toast.success(favorite ? 'Added to favorites' : 'Removed from favorites');
+          // Update selected contact if it's the same contact being toggled
+          if (selectedContact && selectedContact.id === id) {
+            setSelectedContact(updatedContact);
+          }
         },
         onError: (error: any) => {
           const errorMessage = error?.response?.data?.message || error.message || 'Unknown error';
@@ -52,7 +56,7 @@ export const ContactsPage: React.FC = () => {
         },
       }
     );
-  }, [toggleFavoriteMutation]);
+  }, [toggleFavoriteMutation, selectedContact]);
   
   // Handle contact deletion
   const handleDeleteContact = useCallback((id: string) => {
@@ -154,27 +158,6 @@ export const ContactsPage: React.FC = () => {
       toast.error(`Failed to load contacts: ${errorMessage}`);
     }
   }, [error]);
-
-  if (error) {
-    return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
-        <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-            Something went wrong
-          </h2>
-          <p className="text-gray-600 dark:text-gray-400 mb-4">
-            We couldn't load your contacts. Please try again.
-          </p>
-          <button
-            onClick={() => window.location.reload()}
-            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
-          >
-            Retry
-          </button>
-        </div>
-      </div>
-    );
-  }
   
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">

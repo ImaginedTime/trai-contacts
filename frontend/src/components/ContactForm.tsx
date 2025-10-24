@@ -113,7 +113,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto">
-      <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+      <div className="flex items-end justify-center min-h-screen pt-4 px-2 sm:px-4 pb-20 text-center sm:block sm:p-0">
         {/* Background overlay */}
         <div
           className="fixed inset-0 bg-gray-700 bg-opacity-75 opacity-80 transition-opacity"
@@ -123,7 +123,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({
 
         {/* Modal panel */}
         <div
-          className="relative inline-block align-bottom bg-white dark:bg-gray-800 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
+          className="relative inline-block align-bottom bg-white dark:bg-gray-800 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle w-full max-w-lg mx-auto"
           role="dialog"
           aria-modal="true"
           aria-labelledby="modal-title"
