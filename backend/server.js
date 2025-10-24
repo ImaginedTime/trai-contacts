@@ -5,15 +5,7 @@ const { db, initDatabase, seedDatabase } = require('./database');
 const app = express();
 const PORT = process.env.PORT || 8000;
 
-const corsOptions = {
-  origin: ['http://localhost:5173'],
-  methods: ['GET','POST','PUT','DELETE','OPTIONS'],
-  allowedHeaders: ['Content-Type','Authorization','Accept'],
-  credentials: true
-};
-
-app.use(cors(corsOptions));         // << register early
-app.options('*', cors(corsOptions)); // handle preflight explicitly
+app.use(cors());
 app.use(express.json());
 
 
