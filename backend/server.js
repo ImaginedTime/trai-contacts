@@ -47,7 +47,7 @@ app.get('/api/contacts', (req, res) => {
   if (search) {
     query += ' AND (firstName LIKE ? OR lastName LIKE ? OR email LIKE ? OR company LIKE ? OR tags LIKE ?)';
     const searchTerm = `%${search}%`;
-    params.push(searchTerm, searchTerm, searchTerm, searchTerm);
+    params.push(searchTerm, searchTerm, searchTerm, searchTerm, searchTerm);
   }
   
   // Apply favorite filter
